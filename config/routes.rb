@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :projects
+  get 'project_history/index'
+  resources :projects do
+    resources :comments
+    resources :project_histories
+  end
   devise_for :users
 
   # Defines the root path route ("/")
