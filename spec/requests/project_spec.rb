@@ -31,16 +31,26 @@ RSpec.describe 'Project', type: :request do
     end
 
     describe 'GET /projects/:id/edit' do
-      subject { create(:project) }
+      context 'when the user is the owner of the project' do
+        before { @project = create(:project, owner: user) }
 
-      it 'returns http success' do
-        get "/projects/#{subject.id}/edit"
-        expect(response).to have_http_status(:success)
+        it 'returns http success' do
+          get "/projects/#{@project.id}/edit"
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context 'when the user is not the owner of the project' do
+        before { @project = create(:project) }
+
+        it 'returns unauthorized' do
+          get "/projects/#{@project.id}/edit"
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
 
     describe 'POST /projects' do
-      let(:user) { create(:user) }
       let(:project_params) { attributes_for(:project).merge(owner_id: user.id) }
 
       it 'creates a new project' do
@@ -50,22 +60,45 @@ RSpec.describe 'Project', type: :request do
     end
 
     describe 'PUT /projects/:id' do
-      subject { create(:project) }
-      let(:project_params) { attributes_for(:project) }
+      context 'when the user is the owner of the project' do
+        before { @project = create(:project, owner: user) }
+        let(:project_params) { attributes_for(:project) }
 
-      it 'updates the project' do
-        put "/projects/#{subject.id}", params: { project: project_params }
-        subject.reload
-        expect(subject.title).to eq(project_params[:title])
+        it 'updates the project' do
+          put "/projects/#{@project.id}", params: { project: project_params }
+          @project.reload
+          expect(@project.title).to eq(project_params[:title])
+        end
+      end
+
+      context 'when the user is not the owner of the project' do
+        before { @project = create(:project) }
+        let(:project_params) { attributes_for(:project) }
+
+        it 'returns unauthorized' do
+          put "/projects/#{@project.id}", params: { project: project_params }
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
 
     describe 'DELETE /projects/:id' do
-      subject { create(:project) }
+      context 'when the user is the owner of the project' do
+        before { @project = create(:project, owner: user) }
 
-      it 'deletes the project' do
-        delete "/projects/#{subject.id}"
-        expect(Project.count).to eq(0)
+        it 'deletes the project' do
+          delete "/projects/#{@project.id}"
+          expect(Project.count).to eq(0)
+        end
+      end
+
+      context 'when the user is not the owner of the project' do
+        before { @project = create(:project) }
+
+        it 'returns unauthorized' do
+          delete "/projects/#{@project.id}"
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
   end

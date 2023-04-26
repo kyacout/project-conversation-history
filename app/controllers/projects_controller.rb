@@ -18,11 +18,18 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
+    if current_user.id != @project.owner_id
+      respond_to do |format|
+        format.html { redirect_to project_url(@project), status: :unauthorized, notice: "You are not allowed to edit this project." }
+        format.json { render :show, status: :unauthorized, location: @project }
+      end
+    end
   end
 
   # POST /projects or /projects.json
   def create
     @project = Project.new(project_params)
+    @project.status = "ready" if @project.status.blank?
 
     respond_to do |format|
       if @project.save
@@ -37,6 +44,14 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1 or /projects/1.json
   def update
+    if current_user.id != @project.owner_id
+      respond_to do |format|
+        format.html { redirect_to project_url(@project), status: :unauthorized, notice: "You are not allowed to update this project." }
+        format.json { render :show, status: :unauthorized, location: @project }
+      end
+      return
+    end
+
     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to project_url(@project), notice: "Project was successfully updated." }
@@ -50,11 +65,19 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/1 or /projects/1.json
   def destroy
+    if current_user.id != @project.owner_id
+      respond_to do |format|
+        format.html { redirect_to project_url(@project), status: :unauthorized, notice: "You are not allowed to delete this project." }
+        format.json { render :show, status: :unauthorized, location: @project }
+      end
+      return
+    end
+
     @project.destroy
 
     respond_to do |format|
       format.html { redirect_to projects_url, notice: "Project was successfully destroyed." }
-      format.json { head :no_content }
+      format.json { render :index, status: :ok }
     end
   end
 

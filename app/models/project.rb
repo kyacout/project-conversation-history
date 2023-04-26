@@ -5,8 +5,7 @@ class Project < ApplicationRecord
 
   belongs_to :owner, class_name: 'User'
 
-  validates :status, presence: true
+  validates :status, presence: true, inclusion: { in: statuses.keys }
   validates :title, presence: true
   validates :description, presence: true
-  validates :status, inclusion: { in: statuses.keys }
 end
