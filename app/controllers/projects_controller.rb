@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class ProjectsController < ApplicationController
-  before_action :set_project, only: %i[show edit update destroy]
+  before_action :set_project, only: %i[show edit update update_status destroy authorize_user!]
   before_action :authenticate_user!
+  before_action :authorize_user!, only: %i[edit update update_status destroy]
+  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
   # GET /projects or /projects.json
   def index
@@ -48,17 +50,6 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1 or /projects/1.json
   def update
-    if current_user.id != @project.owner_id
-      respond_to do |format|
-        format.html do
-          redirect_to project_url(@project), status: :unauthorized,
-                                             notice: 'You are not allowed to update this project.'
-        end
-        format.json { render :show, status: :unauthorized, location: @project }
-      end
-      return
-    end
-
     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to project_url(@project), notice: 'Project was successfully updated.' }
@@ -72,22 +63,25 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/1 or /projects/1.json
   def destroy
-    if current_user.id != @project.owner_id
-      respond_to do |format|
-        format.html do
-          redirect_to project_url(@project), status: :unauthorized,
-                                             notice: 'You are not allowed to delete this project.'
-        end
-        format.json { render :show, status: :unauthorized, location: @project }
-      end
-      return
-    end
-
     @project.destroy
 
     respond_to do |format|
       format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
       format.json { render :index, status: :ok }
+    end
+  end
+
+  # PUT /projects/1/update_status
+  def update_status
+    ActiveRecord::Base.transaction do
+      @project.project_histories.create!(user: current_user, history_type: :status_update,
+                                         description: "#{@project.status} #{project_params[:status]}")
+      @project.update!(status: project_params[:status])
+    end
+
+    respond_to do |format|
+      format.html { redirect_to projects_url(@project), notice: 'Project status was successfully updated.' }
+      format.json { render :show, status: :ok, location: @project }
     end
   end
 
@@ -101,5 +95,27 @@ class ProjectsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def project_params
     params.require(:project).permit(:title, :description, :status)
+  end
+
+  def authorize_user!
+    if current_user.id != @project.owner_id
+      respond_to do |format|
+        format.html do
+          redirect_to project_url(@project), status: :unauthorized,
+                                             notice: 'You are not authorized to do that.'
+        end
+        format.json { render :show, status: :unauthorized, location: @project }
+      end
+      return false
+    end
+
+    true
+  end
+
+  def record_invalid
+    respond_to do |format|
+      format.html { render :new, status: :unprocessable_entity }
+      format.json { render json: @project.errors, status: :unprocessable_entity }
+    end
   end
 end

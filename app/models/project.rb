@@ -6,6 +6,7 @@ class Project < ApplicationRecord
 
   belongs_to :owner, class_name: 'User'
   has_many :comments, dependent: :destroy
+  has_many :project_histories, dependent: :destroy
 
   validates :status, presence: true, inclusion: { in: statuses.keys }
   validates :title, presence: true

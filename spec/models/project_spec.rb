@@ -13,5 +13,6 @@ RSpec.describe Project, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:owner) }
     it { is_expected.to have_many(:comments) }
+    it { is_expected.to have_many(:project_histories) }
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectHistory < ApplicationRecord
   enum history_types: { comment: 'comment', status_update: 'status_update' }
 
