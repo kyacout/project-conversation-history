@@ -5,6 +5,6 @@ FactoryBot.define do
     title { Faker::Lorem.word }
     description { Faker::Lorem.paragraph }
     status { Project.statuses.keys.sample }
-    owner { create(:user) }
+    owner factory: :user
   end
 end
