@@ -2,9 +2,20 @@ p style="color: green" = notice
 
 == render @project
 
-div
+div class="mt-6"
+  h2 Comments
+  - if @project.comments.any?
+    - @project.comments.each do |comment|
+      == render comment
+  - else
+    p No comments yet
+
+div class="mt-6"
   => link_to "Edit this project", edit_project_path(@project)
   '|
   =< link_to "Back to projects", projects_path
+
+  br
+  =< link_to "Update Status", update_status_path(@project)
 
   = button_to "Destroy this project", @project, method: :delete
