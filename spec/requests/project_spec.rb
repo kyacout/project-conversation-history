@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Project', type: :request do
   context 'when the user is logged in' do
     let(:user) { create(:user) }
+
     before { sign_in user }
 
     describe 'GET /projects' do
@@ -54,7 +55,7 @@ RSpec.describe 'Project', type: :request do
       let(:project_params) { attributes_for(:project).merge(owner_id: user.id) }
 
       it 'creates a new project' do
-        post "/projects", params: { project: project_params }
+        post '/projects', params: { project: project_params }
         expect(Project.count).to eq(1)
       end
     end
@@ -62,6 +63,7 @@ RSpec.describe 'Project', type: :request do
     describe 'PUT /projects/:id' do
       context 'when the user is the owner of the project' do
         before { @project = create(:project, owner: user) }
+
         let(:project_params) { attributes_for(:project) }
 
         it 'updates the project' do
@@ -73,6 +75,7 @@ RSpec.describe 'Project', type: :request do
 
       context 'when the user is not the owner of the project' do
         before { @project = create(:project) }
+
         let(:project_params) { attributes_for(:project) }
 
         it 'returns unauthorized' do
@@ -140,13 +143,14 @@ RSpec.describe 'Project', type: :request do
       let(:project_params) { attributes_for(:project) }
 
       it 'redirects to the login page' do
-        post "/projects", params: { project: project_params }
+        post '/projects', params: { project: project_params }
         expect(response).to redirect_to(new_user_session_path)
       end
     end
 
     describe 'PUT /projects/:id' do
       subject { create(:project) }
+
       let(:project_params) { attributes_for(:project) }
 
       it 'redirects to the login page' do

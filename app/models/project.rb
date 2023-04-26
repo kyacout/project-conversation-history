@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Project < ApplicationRecord
-  enum statuses: { ready: 'ready', in_progress: 'in_progress', paused: 'paused', completed: 'complete', canceled: 'canceled' }
+  enum statuses: { ready: 'ready', in_progress: 'in_progress', paused: 'paused', completed: 'complete',
+                   canceled: 'canceled' }
 
   belongs_to :owner, class_name: 'User'
 

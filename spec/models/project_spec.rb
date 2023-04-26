@@ -7,7 +7,7 @@ RSpec.describe Project, type: :model do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:description) }
     it { is_expected.to validate_presence_of(:status) }
-    it { is_expected.to validate_inclusion_of(:status).in_array(Project.statuses.keys) }
+    it { is_expected.to validate_inclusion_of(:status).in_array(described_class.statuses.keys) }
   end
 
   describe 'associations' do
