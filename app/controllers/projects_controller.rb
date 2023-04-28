@@ -12,7 +12,10 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1 or /projects/1.json
-  def show; end
+  def show
+    @comments = @project.comments.includes(:author).order(created_at: :desc)
+    @project_histories = @project.project_histories.includes(:user).order(created_at: :desc)
+  end
 
   # GET /projects/new
   def new
@@ -27,7 +30,6 @@ class ProjectsController < ApplicationController
       format.html do
         redirect_to project_url(@project), status: :unauthorized, notice: 'You are not allowed to edit this project.'
       end
-      format.json { render :show, status: :unauthorized, location: @project }
     end
   end
 
@@ -40,10 +42,8 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.save
         format.html { redirect_to project_url(@project), notice: 'Project was successfully created.' }
-        format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -53,10 +53,8 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to project_url(@project), notice: 'Project was successfully updated.' }
-        format.json { render :show, status: :ok, location: @project }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -67,7 +65,6 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
-      format.json { render :index, status: :ok }
     end
   end
 
@@ -75,13 +72,12 @@ class ProjectsController < ApplicationController
   def update_status
     ActiveRecord::Base.transaction do
       @project.project_histories.create!(user: current_user, history_type: :status_update,
-                                         description: "#{@project.status} #{project_params[:status]}")
+                                         description: "from #{@project.status} to #{project_params[:status]}")
       @project.update!(status: project_params[:status])
     end
 
     respond_to do |format|
-      format.html { redirect_to projects_url(@project), notice: 'Project status was successfully updated.' }
-      format.json { render :show, status: :ok, location: @project }
+      format.html { redirect_to request.referer || root_path, notice: 'Project state successfully updated.' }
     end
   end
 

@@ -1,0 +1,6 @@
+div id="#{dom_id project_history}" class="mt-6 text-left"
+  p class="text-gray-400 text-sm" = project_history.created_at.strftime("%B %d, %Y at %I:%M %p")
+  - if project_history.history_type == ProjectHistory.history_types[:status_update]
+    p #{project_history.user.email} has updated the status #{project_history.description}
+  - elsif project_history.history_type == ProjectHistory.history_types[:comment]
+    p #{project_history.user.email} commented: #{project_history.description}.

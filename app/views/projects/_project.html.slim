@@ -1,9 +1,5 @@
-p
-  strong Title:
-  =< project.title
-p
-  strong Description:
-  =< project.description
-p
-  strong Status:
-  =< project.status
+h1 class="text-xl font-bold" =< project.title
+p =< project.description
+= form_with(model: project, url: update_project_status_path(project)) do |form|
+  = form.select :status, Project.statuses.keys.map(&:to_s), class: "border border-gray-400 p-2 rounded-lg w-full", selected: project.status
+  = button_tag "Update Status", class: "ml-6 border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"

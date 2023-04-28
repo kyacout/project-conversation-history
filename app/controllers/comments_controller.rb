@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[update destroy]
   before_action :authenticate_user!
 
-  # POST /comments or /comments.json
+  # POST /projects/:id/comments
   def create
     @comment = Comment.new(comment_params)
     @comment.author = current_user
@@ -15,14 +15,16 @@ class CommentsController < ApplicationController
                                          description: comment_params[:content])
       @comment.save!
     end
+
+    redirect_to project_url(@comment.project), notice: 'Comment was successfully created.'
   end
 
-  # PATCH/PUT /comments/1 or /comments/1.json
+  # PATCH/PUT /projects/:id/comments
   def update
     @comment.update(comment_params)
   end
 
-  # DELETE /comments/1 or /comments/1.json
+  # DELETE /projects/:id/comments
   def destroy
     @comment.destroy
   end

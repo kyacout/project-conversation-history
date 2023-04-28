@@ -2,10 +2,10 @@
 
 Rails.application.routes.draw do
   get 'project_history/index'
-  put 'projects/:id/update_status', to: 'projects#update_status', as: 'update_status'
+  patch 'projects/:id/update_status', to: 'projects#update_status', as: 'update_project_status'
 
   resources :projects do
-    resources :comments, only: [:create]
+    resources :comments, only: [:create, :update, :destroy]
   end
   devise_for :users
 
