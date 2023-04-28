@@ -23,8 +23,9 @@ div class="mt-6"
   - else
     p Empty History
 
-div class="mt-6 flex"
-  => link_to "Edit Project", edit_project_path(@project), class: "border border-blue-500 bg-blue-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-blue-600 focus:outline-none focus:shadow-outline"
-  = button_to "Destroy Project", @project, method: :delete, \
-    class: "ml-4 border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline", \
-    data: { turbo_confirm: 'Are you sure you want to delete this project?' }
+- if @project.owner == current_user
+  div class="mt-6 flex"
+    => link_to "Edit Project", edit_project_path(@project), class: "border border-blue-500 bg-blue-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-blue-600 focus:outline-none focus:shadow-outline"
+    = button_to "Destroy Project", @project, method: :delete, \
+      class: "ml-4 border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline", \
+      data: { turbo_confirm: 'Are you sure you want to delete this project?' }

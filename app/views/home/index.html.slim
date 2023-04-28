@@ -1,2 +1,7 @@
-h1 Home#index
-span Hello World!
+div class="border border-gray-500 rounded p-3 m-auto"
+  h1 class="text-center text-xl" Welcome to Project Conversation History!
+  div class="mt-6 text-center"
+    p class="text-center" Please login or sign up to continue.
+  div class="flex justify-center mt-4"
+    = link_to "Login", new_user_session_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    = link_to "Sign Up", new_user_registration_path, class: "ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

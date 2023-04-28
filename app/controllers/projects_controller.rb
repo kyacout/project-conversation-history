@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to project_url(@project), status: :unauthorized, notice: 'You are not allowed to edit this project.'
+        redirect_to project_url(@project), status: :unauthorized, alert: 'You are not allowed to edit this project.'
       end
     end
   end
@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
       if @project.save
         format.html { redirect_to project_url(@project), notice: 'Project was successfully created.' }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity, alert: @project.errors.full_messages.join(', ') }
       end
     end
   end
@@ -54,7 +54,7 @@ class ProjectsController < ApplicationController
       if @project.update(project_params)
         format.html { redirect_to project_url(@project), notice: 'Project was successfully updated.' }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity, alert: @project.errors.full_messages.join(', ') }
       end
     end
   end
@@ -98,9 +98,8 @@ class ProjectsController < ApplicationController
       respond_to do |format|
         format.html do
           redirect_to project_url(@project), status: :unauthorized,
-                                             notice: 'You are not authorized to do that.'
+                      alert: 'You are not authorized to do that.'
         end
-        format.json { render :show, status: :unauthorized, location: @project }
       end
       return false
     end
@@ -110,8 +109,7 @@ class ProjectsController < ApplicationController
 
   def record_invalid
     respond_to do |format|
-      format.html { render :new, status: :unprocessable_entity }
-      format.json { render json: @project.errors, status: :unprocessable_entity }
+      format.html { render :new, status: :unprocessable_entity, alert: @project.errors.full_messages.join(', ') }
     end
   end
 end
