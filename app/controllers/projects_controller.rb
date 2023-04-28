@@ -98,7 +98,7 @@ class ProjectsController < ApplicationController
       respond_to do |format|
         format.html do
           redirect_to project_url(@project), status: :unauthorized,
-                      alert: 'You are not authorized to do that.'
+                                             alert: 'You are not authorized to do that.'
         end
       end
       return false

@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       @comment.project.project_histories.create!(user: current_user, history_type: :comment,
-                                         description: comment_params[:content])
+                                                 description: comment_params[:content])
       @comment.save!
     end
 
