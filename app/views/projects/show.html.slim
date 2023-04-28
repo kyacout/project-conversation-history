@@ -1,21 +1,23 @@
 p style="color: green" = notice
 
 == render @project
+=> link_to "Edit Project", edit_project_path(@project)
+=< link_to "Update Status", update_status_path(@project)
 
 div class="mt-6"
-  h2 Comments
+  h2 class="mt-6 text-l font-bold" Comments
   - if @project.comments.any?
     - @project.comments.each do |comment|
       == render comment
   - else
-    p No comments yet
+    p No comments
+
+  = form_with(model: [@project, @project.comments.build], local: true) do |form|
+    div class="mt-6"
+      = form.text_field :content, class: "border border-gray-400 p-2 rounded-lg w-full"
+      = button_tag "Add Comment", class: "ml-0 border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
+  end
 
 div class="mt-6"
-  => link_to "Edit this project", edit_project_path(@project)
-  '|
   =< link_to "Back to projects", projects_path
-
-  br
-  =< link_to "Update Status", update_status_path(@project)
-
-  = button_to "Destroy this project", @project, method: :delete
+  = button_to "Destroy this project", @project, method: :delete, class: "ml-0 border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"

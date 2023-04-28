@@ -13,3 +13,5 @@
   div
     = form.label :description, style: "display: block"
     = form.text_field :description
+
+  = button_tag form.object.new_record? ? "Create Project" : "Update Project", class: "ml-0 border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"

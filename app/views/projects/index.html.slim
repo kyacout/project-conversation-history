@@ -1,11 +1,12 @@
 p style="color: green" = notice
 
-h1 Projects
+h1 class="mt-6 text-xl font-bold" Projects
 
 #projects
   - @projects.each do |project|
-    == render project
-    p
-      = link_to "Show this project", project
+    = link_to project
+      div id="#{dom_id project}" class="mt-6 border border-gray-400 p-4 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out w-full text-left"
+        == render project
 
-= link_to "New project", new_project_path
+div class="mt-6 w-full flex-row"
+  = link_to "New project", new_project_path, class: "border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
