@@ -77,7 +77,7 @@ class ProjectsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to request.referer || root_path, notice: 'Project state successfully updated.' }
+      format.html { redirect_to request.referer || projects_path, notice: 'Project state successfully updated.' }
     end
   end
 
