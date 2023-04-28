@@ -100,7 +100,7 @@ RSpec.describe 'Project', type: :request do
         it 'creates a new project history' do
           put "/projects/#{@project.id}/update_status", params: { project: project_params }
           expect(ProjectHistory.count).to eq(1)
-          expect(ProjectHistory.first.history_type).to eq('status_update')
+          expect(ProjectHistory.first.history_type).to eq(ProjectHistory.history_types[:status_update])
           expect(ProjectHistory.first.description).to eq("#{@project.status} #{project_params[:status]}")
         end
       end

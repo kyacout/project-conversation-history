@@ -5,8 +5,7 @@ Rails.application.routes.draw do
   put 'projects/:id/update_status', to: 'projects#update_status', as: 'update_status'
 
   resources :projects do
-    resources :comments
-    resources :project_histories
+    resources :comments, only: [:create]
   end
   devise_for :users
 
