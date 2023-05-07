@@ -8,13 +8,13 @@ class ProjectsController < ApplicationController
 
   # GET /projects or /projects.json
   def index
-    @projects = Project.all
+    @pagy, @projects = pagy(Project.all)
   end
 
   # GET /projects/1 or /projects/1.json
   def show
-    @comments = @project.comments.includes(:author).order(created_at: :desc)
-    @project_histories = @project.project_histories.includes(:user).order(created_at: :desc)
+    @pagy_comments, @comments = pagy(@project.comments.includes(:author).order(created_at: :desc))
+    @pagy_project_histories, @project_histories = pagy(@project.project_histories.includes(:user).order(created_at: :desc))
   end
 
   # GET /projects/new

@@ -6,6 +6,9 @@ div class="mt-6"
   - if @comments.any?
     - @comments.each do |comment|
       == render comment
+    div class="mt-6 flex flex-col"
+      == pagy_nav(@pagy_comments)
+      == pagy_info(@pagy_comments)
   - else
     p No comments
 
@@ -20,6 +23,9 @@ div class="mt-6"
   - if @project.project_histories.any?
     - @project.project_histories.each do |proj_history|
       == render proj_history
+    div class="mt-6 flex flex-col"
+      == pagy_nav(@pagy_project_histories)
+      == pagy_info(@pagy_project_histories)
   - else
     p Empty History
 
