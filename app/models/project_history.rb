@@ -8,4 +8,6 @@ class ProjectHistory < ApplicationRecord
 
   validates :history_type, presence: true, inclusion: { in: history_types.keys }
   validates :description, presence: true
+
+  scope :ordered, -> { order(created_at: :desc) }
 end

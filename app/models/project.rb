@@ -11,4 +11,6 @@ class Project < ApplicationRecord
   validates :status, presence: true, inclusion: { in: statuses.keys }
   validates :title, presence: true
   validates :description, presence: true
+
+  scope :ordered, -> { order(created_at: :desc) }
 end

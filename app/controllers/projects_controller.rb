@@ -6,15 +6,15 @@ class ProjectsController < ApplicationController
   before_action :authorize_user!, only: %i[edit update update_status destroy]
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
-  # GET /projects or /projects.json
+  # GET /projects
   def index
-    @pagy, @projects = pagy(Project.all)
+    @pagy, @projects = pagy(Project.ordered)
   end
 
-  # GET /projects/1 or /projects/1.json
+  # GET /projects/1
   def show
-    @pagy_comments, @comments = pagy(@project.comments.includes(:author).order(created_at: :desc))
-    @pagy_project_histories, @project_histories = pagy(@project.project_histories.includes(:user).order(created_at: :desc))
+    @pagy_comments, @comments = pagy(@project.comments.includes(:author).ordered)
+    @pagy_project_histories, @project_histories = pagy(@project.project_histories.includes(:user).ordered)
   end
 
   # GET /projects/new
@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # POST /projects or /projects.json
+  # POST /projects
   def create
     @project = Project.new(project_params)
     @project.status = 'ready' if @project.status.blank?
@@ -48,7 +48,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /projects/1 or /projects/1.json
+  # PATCH/PUT /projects/1
   def update
     respond_to do |format|
       if @project.update(project_params)
@@ -59,7 +59,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # DELETE /projects/1 or /projects/1.json
+  # DELETE /projects/1
   def destroy
     @project.destroy
 

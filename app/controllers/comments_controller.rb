@@ -9,12 +9,7 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     @comment.author = current_user
     @comment.project_id = params[:project_id]
-
-    ActiveRecord::Base.transaction do
-      @comment.project.project_histories.create!(user: current_user, history_type: :comment,
-                                                 description: comment_params[:content])
-      @comment.save!
-    end
+    @comment.save!
 
     redirect_to project_url(@comment.project), notice: 'Comment was successfully created.'
   end
