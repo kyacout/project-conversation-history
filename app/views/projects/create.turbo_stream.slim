@@ -1,0 +1,4 @@
+== turbo_stream.prepend "projects", @project
+== turbo_stream.prepend "user_projects", partial: "projects/user_projects", locals: { project: @project }
+== turbo_stream.update Project.new, ""
+== turbo_stream.update "no_projects", ""

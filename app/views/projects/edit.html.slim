@@ -1,6 +1,7 @@
 h1 Editing project
 
-== render "form", project: @project
+= turbo_frame_tag @project do
+  = render "form", project: @project
 
 br
 

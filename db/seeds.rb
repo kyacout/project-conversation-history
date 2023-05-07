@@ -17,8 +17,8 @@ end
 100.times do
   project = Project.all.sample
   user = User.all.sample
-  create(:comment, project: project, author: user)
-  create(:project_history, :comment, project: project, user: user)
+  create(:comment, project:, author: user)
+  create(:project_history, :comment, project:, user:)
 end
 
 # Create 100 status_update in the past using the :status_update trait in the :project_history factory

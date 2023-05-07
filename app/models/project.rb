@@ -13,4 +13,18 @@ class Project < ApplicationRecord
   validates :description, presence: true
 
   scope :ordered, -> { order(created_at: :desc) }
+
+  broadcasts_to ->(_project) { 'projects' }, inserts_by: :prepend
+
+  after_update :create_project_history
+
+  private
+
+  def create_project_history
+    return unless saved_change_to_status?
+
+    previous_status, current_status = saved_change_to_status
+    project_histories.create!(user: owner, history_type: :status_update,
+                              description: "from #{previous_status} to #{current_status}")
+  end
 end

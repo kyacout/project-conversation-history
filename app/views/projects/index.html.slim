@@ -1,17 +1,26 @@
-h1 class="mt-6 text-xl font-bold" Projects
+= turbo_stream_from "projects"
 
-#projects
+div class="flex justify-between"
+  h1 class="mt-6 text-xl font-bold" My Projects
+  = link_to "New project", new_project_path, data: { turbo_frame: dom_id(Project.new) }, class: "mt-2 border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
+div class="w-full border-2 border-blue-600 my-4"
+
+= turbo_frame_tag Project.new
+= turbo_frame_tag "user_projects" do
+  - if @user_projects == []
+    = turbo_frame_tag "no_projects" do
+      p class="mt-6 text-l" You have no projects yet.
+  - else
+    - @user_projects.each do |project|
+      = render partial: "projects/user_projects", locals: { project: project }
+
+h1 class="mt-6 text-xl font-bold mb-4" All Projects
+div class="w-full border-2 border-blue-600 my-4"
+
+= turbo_frame_tag "projects" do
   - @projects.each do |project|
-    div id="#{dom_id project}" class="flex-col mt-6 border border-gray-400 p-4 rounded-lg w-full text-left"
-      div
-        == render project
-      div class="mt-6 w-full flex-row"
-        = link_to "Show", project, class: "border border-blue-500 bg-blue-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-blue-600 focus:outline-none focus:shadow-outline"
-        - if project.owner == current_user
-          = link_to "Edit", edit_project_path(project), class: "mt-2 ml-2 border border-yellow-500 bg-yellow-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline"
-          = link_to "Delete", project, method: :delete, data: { confirm: "Are you sure?" }, class: "mt-2 ml-2 border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
-  div class="mt-6 flex flex-col"
-    == pagy_nav(@pagy)
-    == pagy_info(@pagy)
-div class="mt-6 w-full flex-row"
-  = link_to "New project", new_project_path, class: "mt-2 border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
+    = render project
+
+div class="mt-6 flex flex-col"
+  == pagy_nav(@pagy)
+  == pagy_info(@pagy)

@@ -1,7 +1,8 @@
 h1 class="mt-6 text-xl font-bold" New Project
 
 div class="mt-6"
-  == render "form", project: @project
+  == turbo_frame_tag @project do
+    == render "form", project: @project
 
 br
 

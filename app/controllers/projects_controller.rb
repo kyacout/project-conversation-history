@@ -9,6 +9,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   def index
     @pagy, @projects = pagy(Project.ordered)
+    @user_projects = current_user.projects.ordered
   end
 
   # GET /projects/1
@@ -42,6 +43,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.save
         format.html { redirect_to project_url(@project), notice: 'Project was successfully created.' }
+        format.turbo_stream
       else
         format.html { render :new, status: :unprocessable_entity, alert: @project.errors.full_messages.join(', ') }
       end
@@ -65,19 +67,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
-    end
-  end
-
-  # PUT /projects/1/update_status
-  def update_status
-    ActiveRecord::Base.transaction do
-      @project.project_histories.create!(user: current_user, history_type: :status_update,
-                                         description: "from #{@project.status} to #{project_params[:status]}")
-      @project.update!(status: project_params[:status])
-    end
-
-    respond_to do |format|
-      format.html { redirect_to request.referer || projects_path, notice: 'Project state successfully updated.' }
+      format.turbo_stream
     end
   end
 

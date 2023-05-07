@@ -1,0 +1,5 @@
+div class="w-full bg-blue-600 text-white py-6 flex px-8 justify-between"
+  p class="text-bold w-fit" Project Conversation History
+  div class="flex-row w-fit"
+    - if user_signed_in?
+      = button_to "Sign out", destroy_user_session_path, method: :delete, class: "text-white w-wrap"

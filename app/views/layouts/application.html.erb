@@ -13,14 +13,7 @@
   </head>
 
   <body>
-    <div class="w-full bg-blue-600 text-white py-6 flex px-4 justify-between">
-      <p class="text-bold w-fit">Project Conversation History</p>
-      <div class="flex-row w-fit">
-        <% if user_signed_in? %>
-          <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "text-white w-wrap" %>
-        <% end %>
-      </div>
-    </div>
+    <%= render "layouts/navbar" %>
     <div class="p-8">
       <% if notice %>
         <div class="notice mb-4 border border-green-500 bg-green-200 text-green-700 rounded-md px-6 py-2">
@@ -32,9 +25,7 @@
           <%= alert %>
         </div>
       <% end %>
-      <div class="flex-row">
-        <%= yield %>
-      </div>
+      <%= yield %>
     </div>
   </body>
 </html>

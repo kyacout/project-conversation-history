@@ -17,9 +17,9 @@ RSpec.describe ProjectHistory, type: :model do
   describe 'scopes' do
     describe '.ordered' do
       let!(:project) { create(:project) }
-      let!(:project_history1) { create(:project_history, :comment, project: project) }
-      let!(:project_history2) { create(:project_history, :comment, project: project) }
-      let!(:project_history3) { create(:project_history, :comment, project: project) }
+      let!(:project_history1) { create(:project_history, :comment, project:) }
+      let!(:project_history2) { create(:project_history, :comment, project:) }
+      let!(:project_history3) { create(:project_history, :comment, project:) }
 
       it 'returns the project histories ordered by created_at' do
         expect(project.project_histories.ordered).to eq([project_history3, project_history2, project_history1])

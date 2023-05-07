@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   end
 
   get 'project_history/index'
-  patch 'projects/:id/update_status', to: 'projects#update_status', as: 'update_project_status'
 
   resources :projects do
     resources :comments, only: %i[create update destroy]
