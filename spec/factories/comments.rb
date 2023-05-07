@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :comment do
     content { Faker::Lorem.paragraph }
-    owner factory: :user
+    author factory: :user
+    project
   end
 end

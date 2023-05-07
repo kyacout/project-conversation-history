@@ -65,11 +65,11 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'factory_bot_rails'
+  gem 'faker'
 end
 
 group :test do
-  gem 'factory_bot_rails'
-  gem 'faker'
   gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 5.0'
 end

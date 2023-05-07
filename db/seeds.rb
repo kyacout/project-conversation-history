@@ -1,8 +1,27 @@
 # frozen_string_literal: true
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+
+require 'factory_bot_rails' # Add this line to require FactoryBot
+include FactoryBot::Syntax::Methods # Include FactoryBot methods
+
+# Create 10 users using the :user factory
+10.times do
+  create(:user)
+end
+
+# Create 10 projects using the :project factory
+20.times do
+  create(:project)
+end
+
+# Create 100 comments using the :comment factory
+100.times do
+  project = Project.all.sample
+  user = User.all.sample
+  create(:comment, project: project, author: user)
+  create(:project_history, :comment, project: project, user: user)
+end
+
+# Create 100 status_update in the past using the :status_update trait in the :project_history factory
+100.times do
+  create(:project_history, :status_update, project: Project.all.sample, user: User.all.sample)
+end
